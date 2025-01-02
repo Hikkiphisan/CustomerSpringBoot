@@ -154,13 +154,178 @@
             pointer-events: none;
             opacity: 0.5;
         }
+
+
+
+
+        .pagination-container {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .pagination-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .pagination-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover {
+            background: white;
+            color: #e73c7e;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .pagination-btn .arrow {
+            font-size: 1.2em;
+            margin: 0 5px;
+        }
+
+        .pagination-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .current-page {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #23d5ab;
+        }
+
+        .separator {
+            opacity: 0.8;
+        }
+
+        .total-pages {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .pagination-content {
+                padding: 0.8rem 1.2rem;
+                gap: 1rem;
+            }
+
+            .pagination-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9em;
+            }
+        }
+
+
+
+
+
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-input:focus {
+            border-color: white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .search-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid white;
+            color: white;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: white;
+            color: #e73c7e;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .search-form {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .search-input,
+            .search-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="particles"></div>
 <div class="container">
+
+    <div class="search-container">
+        <form th:action="@{/customers/search}" method="get" class="search-form">
+            <input type="text" name="search" class="search-input" placeholder="Search customers...">
+            <button type="submit" class="search-btn">
+                Search
+            </button>
+        </form>
+    </div>
     <h1>Customers</h1>
     <a href="/customers/create" class="create-btn">Create new customer</a>
+    <a href="/customers/listProvince" class="create-btn">Delete Province</a>
     <table>
         <tr>
             <th>First name</th>
@@ -184,6 +349,32 @@
         </th:block>
     </table>
 </div>
+
+
+
+<div class="pagination-container">
+    <div class="pagination-content">
+        <a class="pagination-btn" th:if="${customers.hasPrevious()}"
+           th:href="@{'/customers/customers'(page=${customers.number - 1})}">
+            <span class="arrow">←</span> Previous
+        </a>
+
+        <div class="pagination-info">
+            <span class="current-page" th:text="${customers.number + 1}"></span>
+            <span class="separator">of</span>
+            <span class="total-pages" th:text="${customers.totalPages}"></span>
+        </div>
+
+        <a class="pagination-btn" th:if="${customers.hasNext()}"
+           th:href="@{'/customers/customers'(page=${customers.number + 1})}">
+            Next <span class="arrow">→</span>
+        </a>
+    </div>
+</div>
+
+
+
+
 
 <script>
     // Create particles

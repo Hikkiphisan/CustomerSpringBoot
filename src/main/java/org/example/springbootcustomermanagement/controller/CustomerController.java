@@ -5,7 +5,10 @@ import org.example.springbootcustomermanagement.model.Province;
 import org.example.springbootcustomermanagement.service.ICustomerService;
 import org.example.springbootcustomermanagement.service.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,12 +60,34 @@ public class CustomerController {
         modelAndView.addObject("message", "New customer created successfully");
         return modelAndView;
     }
+
+
     @GetMapping("/customers")
-    public ModelAndView listCustomers() {
+    public ModelAndView listCustomers(Pageable pageable){
+        Page<Customer> customers = customerService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/customer/list");
-        modelAndView.addObject("customers", customerService.findAll());
+        modelAndView.addObject("customers", customers);
         return modelAndView;
     }
+
+    @GetMapping("/search")
+    public ModelAndView listCustomersSearch(@RequestParam("search") Optional<String> search, Pageable pageable){
+        Page<Customer> customers;
+        if(search.isPresent()){
+            customers = customerService.findAllByFirstNameContaining(pageable, search.get());
+        } else {
+            customers = customerService.findAll(pageable);
+        }
+        ModelAndView modelAndView = new ModelAndView("/customer/list");
+        modelAndView.addObject("customers", customers);
+        return modelAndView;
+    }
+
+
+
+
+
+
 
 
     @GetMapping("/update/{id}")
@@ -106,5 +131,34 @@ public class CustomerController {
         modelAndView.addObject("message", "Customer updated successfully");
         return modelAndView;
     }
+
+
+
+
+
+
+
+
+    // Hiển thị danh sách các tỉnh
+    @GetMapping("/listProvince")
+    public String listProvinces(Model model) {
+        model.addAttribute("provinces", provinceService.findAll());
+        return "customer/listprovince";  // trả về view (HTML) với danh sách các tỉnh
+    }
+
+    // Xóa tỉnh
+    @GetMapping("/deleteProvince/{id}")
+    public String deleteProvince(@PathVariable("id") Long provinceId, Model model) {
+        try {
+            provinceService.deleteProvincebyProcedure(provinceId);
+            model.addAttribute("message", "Province deleted successfully.");
+        } catch (Exception e) {
+            model.addAttribute("message", "Failed to delete province: " + e.getMessage());
+        }
+        return "redirect:/customers/listProvince";  // Sau khi xóa, quay lại danh sách tỉnh
+    }
+
+
+
 
 }
