@@ -182,13 +182,22 @@
                 <td><input type="text" th:field="*{lastName}"/></td>
             </tr>
             <tr>
+                <td>Province:</td>
+                <td>
+                    <select th:field="*{province}">
+                        <option th:each="province : ${provinces}"
+                                th:value="${province.id}"
+                                th:text="${province.name}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td></td>
                 <td><input type="submit" value="Create customer"></td>
             </tr>
         </table>
     </form>
 </div>
-
 <script>
     // Create particles
     const particlesContainer = document.querySelector('.particles');

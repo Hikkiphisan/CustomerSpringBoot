@@ -165,6 +165,7 @@
         <tr>
             <th>First name</th>
             <th>Last name</th>
+            <th>Province</th>
             <th>Update</th>
             <th>Delete</th>
         </tr>
@@ -172,8 +173,13 @@
             <tr>
                 <td th:text="${customer.firstName}"></td>
                 <td th:text="${customer.lastName}"></td>
-                <td><a th:href="@{/customers/update/__${customer.id}__ }" class="action-link update-link">Update</a></td>
-                <td><a th:href="@{/customers/delete/__${customer.id}__ }" class="action-link delete-link">Delete</a></td>
+                <td th:text="${customer.province?.name}"></td>
+                <td>
+                    <a th:href="@{/customers/update/__${customer.id}__}" class="action-link update-link">Update</a>
+                </td>
+                <td>
+                    <a th:href="@{/customers/delete/__${customer.id}__}" class="action-link delete-link">Delete</a>
+                </td>
             </tr>
         </th:block>
     </table>

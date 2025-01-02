@@ -164,7 +164,7 @@
 <div class="container">
     <h1>Update customer</h1>
     <p>
-        <a href="/customers" class="back-link">Customer list</a>
+        <a href="/customers/customers" class="back-link">Customer list</a>
     </p>
     <th:block th:if="${message}">
         <div class="message">
@@ -181,6 +181,18 @@
             <tr>
                 <td>Last name:</td>
                 <td><input type="text" th:field="*{lastName}"/></td>
+            </tr>
+            <tr>
+                <td>Province:</td>
+                <td>
+                    <select th:field="*{province.id}">
+                        <option th:each="province : ${provinces}"
+                                th:value="${province.id}"
+                                th:text="${province.name}"
+                                th:selected="${customer.province?.id == province.id}">
+                        </option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td></td>
